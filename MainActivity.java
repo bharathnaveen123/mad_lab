@@ -1,46 +1,52 @@
-package com.example.font;
-
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+package com.example.layout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
-    int ch=1;
-    float font=30;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        final TextView t=(TextView)findViewById(R.id.textView);
-        Button b1= (Button)findViewById(R.id.button);
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                t.setTextSize(font);
-                font = font + 5;
-                if (font == 50)
-                    font = 30;
-            }
-        });
-        Button b2= (Button) findViewById(R.id.button2);
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                switch(ch) {
-                    case 1: t.setTextColor(Color.RED);break;
-                    case 2: t.setTextColor(Color.GREEN);break;
-                    case 3: t.setTextColor(Color.BLUE);break;
-                    case 4: t.setTextColor(Color.CYAN);break;
-                    case 5: t.setTextColor(Color.YELLOW);break;
-                    case 6: t.setTextColor(Color.MAGENTA);break;
-                }
-                ch++;
-                if(ch == 7) ch=1;
-            }  });
-    }
+import android.content.Intent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
+import android.os.Bundle;
+
+public class MainActivity extends AppCompatActivity {
+
+        EditText e1,e2;
+        Button bt;
+        Spinner s;
+
+        String[] dept_array={"CSE","ECE","IT","ME","CV","ISE"};
+
+        String name,reg,dept;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_main);
+                e1=(EditText)findViewById(R.id.editText2);
+                e2=(EditText)findViewById(R.id.editText3);
+
+                bt=(Button)findViewById(R.id.button);
+                s=(Spinner)findViewById(R.id.spinner);
+                ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_spinner_item,dept_array);
+                s.setAdapter(adapter);
+
+                bt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                name=e1.getText().toString();
+                                reg=e2.getText().toString();
+                                dept=s.getSelectedItem().toString();
+
+                                Intent i=new Intent(MainActivity.this, activity_second.class);
+                                i.putExtra("name_key",name);
+                                i.putExtra("reg_key",reg);
+                                i.putExtra("dept_key",dept);
+
+                                startActivity(i);
+                        }
+                });
+        }
 }
