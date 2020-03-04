@@ -1,52 +1,80 @@
-package com.example.layout;
+package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TextView;
 
-import android.os.Bundle;
+public class MainActivity extends AppCompatActivity implements OnClickListener
+{
 
-public class MainActivity extends AppCompatActivity {
+    EditText Num1;
+    EditText Num2;
+    Button Add;
+    Button Sub;
+    Button Mul;
+    Button Div;
+    TextView Result;
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Num1=(EditText)findViewById(R.id.editText1);
+        Num2 = (EditText) findViewById(R.id.editText2);
+        Add = (Button) findViewById(R.id.Add);
+        Sub = (Button) findViewById(R.id.Sub);
+        Mul = (Button) findViewById(R.id.Mul);
+        Div = (Button) findViewById(R.id.Div);
+        Result = (TextView) findViewById(R.id.textView);
+// set a listener
+        Add.setOnClickListener(this);
+        Sub.setOnClickListener(this);
+        Mul.setOnClickListener(this);
+        Div.setOnClickListener(this);
+    }
+    @Override
+    public void onClick (View v)
+    {
+        float num1 = 0;
+        float num2 = 0;
+        float result = 0;
+        String oper = " ";
 
-        EditText e1,e2;
-        Button bt;
-        Spinner s;
+        if(TextUtils.isEmpty(Num1.getText().toString()) ||
+                TextUtils.isEmpty(Num2.getText().toString()))
+            return;
 
-        String[] dept_array={"CSE","ECE","IT","ME","CV","ISE"};
+        num1 = Float.parseFloat(Num1.getText().toString());
+        num2 = Float.parseFloat(Num2.getText().toString());
 
-        String name,reg,dept;
+        switch(v.getId())
+        {
+            case R.id.Add: oper = "+";
+                            result = num1 + num2;
+                            break;
+            case R.id.Sub:
+            oper = "-";
+            result = num1 - num2;
+            break;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_main);
-                e1=(EditText)findViewById(R.id.editText2);
-                e2=(EditText)findViewById(R.id.editText3);
+            case R.id.Mul:oper = "*";
+            result = num1 * num2;
+            break;
 
-                bt=(Button)findViewById(R.id.button);
-                s=(Spinner)findViewById(R.id.spinner);
-                ArrayAdapter adapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_spinner_item,dept_array);
-                s.setAdapter(adapter);
+            case R.id.Div:
+            oper = "/";
+            result = num1 / num2;
+            break;
 
-                bt.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                                name=e1.getText().toString();
-                                reg=e2.getText().toString();
-                                dept=s.getSelectedItem().toString();
-
-                                Intent i=new Intent(MainActivity.this, activity_second.class);
-                                i.putExtra("name_key",name);
-                                i.putExtra("reg_key",reg);
-                                i.putExtra("dept_key",dept);
-
-                                startActivity(i);
-                        }
-                });
+            default:
+                break;
         }
+        Result.setText(num1 + " "+ oper + " "+ num2 + " = "+ result);
+    }
 }
